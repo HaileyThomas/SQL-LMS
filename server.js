@@ -28,3 +28,35 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// db.query(`SELECT * FROM patrons`, (err, rows) => {
+// console.log(rows);
+// });
+
+// GET a single patron
+//db.query(`SELECT * FROM patrons WHERE id = 1`, (err, row) => {
+//if (err) {
+//console.log(err);
+//}
+//console.log(row);
+//});
+
+// DELETE a patron
+//db.query(`DELETE FROM patrons WHERE id = ?`, 1, (err, result) => {
+//if (err) {
+//console.log(err);
+//}
+//console.log(result);
+//});
+
+// CREATE a patron
+//const sql = `INSERT INTO patrons (id, first_name, last_name, address)
+//            VALUES (?, ?, ?, ?)`;
+//const params = [1, "Hailey", "Thomas", "408 Citrus Trail"];
+
+//db.query(sql, params, (err, result) => {
+//if (err) {
+//console.log(err);
+//}
+//console.log(result);
+//});
