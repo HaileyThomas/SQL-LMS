@@ -19,19 +19,26 @@ const db = mysql.createConnection(
   console.log("Connected to the library database.")
 );
 
-// default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
-
 // listen for server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// db.query(`SELECT * FROM patrons`, (err, rows) => {
-// console.log(rows);
-// });
+// Get all patrons
+app.get("/api/patrons", (req, res) => {
+  const sql = `SELECT * FROM patrons`;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: rows,
+    });
+  });
+});
 
 // GET a single patron
 //db.query(`SELECT * FROM patrons WHERE id = 1`, (err, row) => {
@@ -60,3 +67,8 @@ app.listen(PORT, () => {
 //}
 //console.log(result);
 //});
+
+// default response for any other request (Not Found)
+app.use((req, res) => {
+  res.status(404).end();
+});
