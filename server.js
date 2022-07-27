@@ -58,12 +58,26 @@ app.get("/api/patrons/:id", (req, res) => {
 });
 
 // DELETE a patron
-//db.query(`DELETE FROM patrons WHERE id = ?`, 1, (err, result) => {
-//if (err) {
-//console.log(err);
-//}
-//console.log(result);
-//});
+app.delete("/api/patrons/:id", (req, res) => {
+  const sql = `DELETE FROM patrons WHERE id = ?`;
+  const params = [req.params.id];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.statusMessage(400).json({ error: res.message });
+    } else if (!result.affectedRows) {
+      res.json({
+        message: "Patron not found!",
+      });
+    } else {
+      res.json({
+        message: "deleted",
+        changes: result.affectedRows,
+        id: req.params.id,
+      });
+    }
+  });
+});
 
 // CREATE a patron
 //const sql = `INSERT INTO patrons (id, first_name, last_name, address)
