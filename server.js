@@ -24,7 +24,7 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// Get all patrons
+// GET all patrons
 app.get("/api/patrons", (req, res) => {
   const sql = `SELECT * FROM patrons`;
 
@@ -41,12 +41,21 @@ app.get("/api/patrons", (req, res) => {
 });
 
 // GET a single patron
-//db.query(`SELECT * FROM patrons WHERE id = 1`, (err, row) => {
-//if (err) {
-//console.log(err);
-//}
-//console.log(row);
-//});
+app.get("/api/patrons/:id", (req, res) => {
+  const sql = `SELECT * FROM patrons WHERE id= ?`;
+  const params = [req.params.id];
+
+  db.query(sql, params, (err, row) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: row,
+    });
+  });
+});
 
 // DELETE a patron
 //db.query(`DELETE FROM patrons WHERE id = ?`, 1, (err, result) => {
