@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require("mysql2");
+const inputCheck = require("./utils/inputCheck");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -79,17 +80,29 @@ app.delete("/api/patrons/:id", (req, res) => {
   });
 });
 
-// CREATE a patron
-//const sql = `INSERT INTO patrons (id, first_name, last_name, address)
-//            VALUES (?, ?, ?, ?)`;
-//const params = [1, "Hailey", "Thomas", "408 Citrus Trail"];
+// POST (create) a new patron
+app.post("/api/patrons", ({ body }, res) => {
+  const errors = inputCheck(body, "first_name", "last_name", "address");
+  if (errors) {
+    res.status(400).json({ error: errors });
+    return;
+  }
 
-//db.query(sql, params, (err, result) => {
-//if (err) {
-//console.log(err);
-//}
-//console.log(result);
-//});
+  const sql = `INSERT INTO patrons (first_name, last_name, address)
+                VALUES (?, ?, ?)`;
+  const params = [body.first_name, body.last_name, body.address];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "Created new patron!",
+      data: body,
+    });
+  });
+});
 
 // default response for any other request (Not Found)
 app.use((req, res) => {
